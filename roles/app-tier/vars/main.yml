@@ -1,0 +1,9 @@
+---
+# vars file for roles/app-tier
+srv_pkg:
+  - httpd
+  - tomcat
+srv_name:
+  - httpd
+  - tomcat
+tomcat_srv: tomcat

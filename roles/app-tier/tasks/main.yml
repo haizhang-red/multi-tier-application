@@ -1,0 +1,41 @@
+---
+# tasks file for roles/app-tier
+# Installation of packages based on inventory groupss
+- name: Install web service
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "{{ srv_pkg }}"
+
+- name: Start web service
+  service:
+   name: "{{ item }}"
+   enabled: true
+   state: started
+  with_items:
+    - "{{ srv_name }}"
+
+- name: create ansible tomcat directory
+  file:
+    path: /usr/share/tomcat/webapps/ROOT
+    state: directory
+
+- name: copy static index.html to tomcat webapps/ROOT/index.html
+  template:
+    src: index.html.j2
+    dest: /usr/share/tomcat/webapps/ROOT/index.html
+    mode: 0644
+  notify:
+    - restart_tomcat
+
+- name: create ansible tomcat directory
+  file:
+    path: /usr/share/tomcat/webapps/ansible
+    state: directory
+
+- name: copy static index.html to tomcat webapps/ansible/index.html
+  template:
+    src: index.html.app
+    dest: /usr/share/tomcat/webapps/ansible/index.html
+    mode: 0644
